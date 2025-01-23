@@ -1,0 +1,594 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Healthy Diet Programs</title>
+    <link rel="stylesheet" href="style.css">
+    <style>
+        .diet-programs {
+            padding: 80px 0;
+            background: #f9f9f9;
+        }
+
+        .program-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 30px;
+            margin-top: 40px;
+        }
+
+        .program-card {
+            background: #fff;
+            border-radius: 15px;
+            overflow: hidden;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            transition: transform 0.3s;
+        }
+
+        .program-card:hover {
+            transform: translateY(-5px);
+        }
+
+        .program-image {
+            width: 100%;
+            height: 200px;
+            object-fit: cover;
+        }
+
+        .program-content {
+            padding: 20px;
+        }
+
+        .program-title {
+            color: #333;
+            font-size: 24px;
+            margin-bottom: 15px;
+        }
+
+        .program-description {
+            color: #666;
+            margin-bottom: 20px;
+        }
+
+        .program-features {
+            margin-bottom: 20px;
+        }
+
+        .feature-item {
+            display: flex;
+            align-items: center;
+            margin-bottom: 10px;
+            color: #555;
+        }
+
+        .feature-item::before {
+            content: "✓";
+            color: #67ffae;
+            margin-right: 10px;
+            font-weight: bold;
+        }
+
+        .calculator-section {
+            background: #fff;
+            padding: 40px;
+            border-radius: 15px;
+            margin-top: 40px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        .calculator-form {
+            max-width: 500px;
+            margin: 20px auto;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 5px;
+            color: #333;
+        }
+
+        .form-group input, 
+        .form-group select {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+        }
+
+        .calculate-btn {
+            background: #67ffae;
+            color: #333;
+            border: none;
+            padding: 12px 25px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 16px;
+            transition: background 0.3s;
+        }
+
+        .calculate-btn:hover {
+            background: #1ed48e;
+        }
+
+        .result-section {
+            margin-top: 20px;
+            padding: 20px;
+            background: #f0f0f0;
+            border-radius: 8px;
+            display: none;
+        }
+
+        .timeline {
+            margin-top: 40px;
+            padding: 20px;
+        }
+
+        .timeline-item {
+            display: flex;
+            margin-bottom: 30px;
+        }
+
+        .timeline-content {
+            margin-left: 20px;
+            padding: 20px;
+            background: #fff;
+            border-radius: 10px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+
+        .nav-toggle {
+            display: none;
+        }
+
+        .nav-toggle-label {
+            display: none;
+        }
+        .meal-planner-section {
+            margin-top: 60px;
+            background: #fff;
+            padding: 40px;
+            border-radius: 15px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        .meal-planner-container {
+            display: grid;
+            grid-template-columns: 2fr 1fr;
+            gap: 30px;
+            margin-top: 30px;
+        }
+
+        .calendar-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 20px;
+        }
+
+        .calendar-header button {
+            background: #67ffae;
+            border: none;
+            padding: 8px 15px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 18px;
+        }
+
+        .calendar-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 20px;
+            overflow-x: auto;
+        }
+
+        .day-column {
+            background: #f9f9f9;
+            padding: 15px;
+            border-radius: 10px;
+        }
+
+        .day-column h4 {
+            text-align: center;
+            margin-bottom: 15px;
+            color: #333;
+        }
+
+        .meal-slot {
+            background: white;
+            padding: 10px;
+            margin-bottom: 10px;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+        }
+
+        .meal-slot h5 {
+            color: #4CAF50;
+            margin-bottom: 5px;
+        }
+
+        .meal-content {
+            min-height: 60px;
+            padding: 8px;
+            border: 1px dashed #ddd;
+            border-radius: 4px;
+        }
+
+        .meal-content:empty::before {
+            content: attr(placeholder);
+            color: #999;
+        }
+
+        .meal-suggestions {
+            background: #f9f9f9;
+            padding: 20px;
+            border-radius: 10px;
+        }
+
+        .suggestion-filters {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 20px;
+        }
+
+        .suggestion-filters select {
+            flex: 1;
+            padding: 8px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+        }
+
+        .meal-plan-controls {
+            display: flex;
+            gap: 15px;
+            justify-content: center;
+            margin-top: 30px;
+        }
+
+        @media screen and (max-width: 1024px) {
+            .meal-planner-container {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        @media screen and (max-width: 768px) {
+            .calendar-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        /* Mobile styles */
+        @media screen and (max-width: 768px) {
+            nav {
+                width: 100%;
+                position: fixed;
+                top: 0;
+                padding: 10px 5%;
+                display: flex;
+                align-items: center;
+                justify-content: space-between;
+                background: rgba(0, 0, 0, 0.9);
+                z-index: 1000;
+            }
+
+            .nav-toggle-label {
+                display: block;
+                cursor: pointer;
+                position: relative;
+                z-index: 1000;
+                padding: 1rem;
+            }
+
+            .nav-toggle-label span {
+                display: block;
+                width: 25px;
+                height: 3px;
+                background-color: white;
+                margin-bottom: 5px;
+                transition: transform 0.3s ease-in-out;
+            }
+
+            nav ul {
+                position: fixed;
+                top: 0;
+                right: -200px;
+                width: 200px;
+                height: 100vh;
+                background: rgba(0, 0, 0, 0.9);
+                padding-top: 60px;
+                transition: right 0.3s ease-in-out;
+            }
+
+            nav ul li {
+                display: block;
+                margin: 20px;
+            }
+
+            .nav-toggle:checked ~ ul {
+                right: 0;
+            }
+
+            body {
+                padding-top: 60px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <nav>
+        <img src="image/logo.png" class="logo" alt="Healthy Food Logo">
+        <input type="checkbox" id="nav-toggle" class="nav-toggle">
+        <label for="nav-toggle" class="nav-toggle-label">
+            <span></span>
+            <span></span>
+            <span></span>
+        </label>
+        <ul>
+            <li><a href="index.html">Home</a></li>
+            <li><a href="index.html#about">About</a></li>
+            <li><a href="index.html#recipes">Recipes</a></li>
+            <li><a href="index.html#tips">Tips</a></li>
+            <li><a href="index.html#contact">Contact</a></li>
+            <li><a href="healthyfoods.html">Healthy Foods</a></li>
+            <li><a href="dietprogram.html">Diet Program</a></li>
+        </ul>
+    </nav>
+
+    <div class="diet-programs">
+        <div class="container">
+            <h1 class="sub-title">Healthy Diet Programs</h1>
+            <p>Choose the perfect diet program tailored to your goals and lifestyle.</p>
+
+            <div class="program-container">
+                <!-- Weight Loss Program -->
+                <div class="program-card">
+                    <img src="image/weightloss.jpg" alt="Weight Loss Program" class="program-image">
+                    <div class="program-content">
+                        <h2 class="program-title">Weight Loss Program</h2>
+                        <p class="program-description">A balanced approach to sustainable weight loss through healthy eating and lifestyle changes.</p>
+                        <div class="program-features">
+                            <div class="feature-item">Personalized meal plans</div>
+                            <div class="feature-item">Calorie-controlled portions</div>
+                            <div class="feature-item">Weekly progress tracking</div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Muscle Gain Program -->
+                <div class="program-card">
+                    <img src="image/musclegain.jpg" alt="Muscle Gain Program" class="program-image">
+                    <div class="program-content">
+                        <h2 class="program-title">Muscle Gain Program</h2>
+                        <p class="program-description">High-protein diet plans designed to support muscle growth and recovery.</p>
+                        <div class="program-features">
+                            <div class="feature-item">Protein-rich meal plans</div>
+                            <div class="feature-item">Supplement guidance</div>
+                            <div class="feature-item">Workout nutrition timing</div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Maintenance Program -->
+                <div class="program-card">
+                    <img src="image/maintenance.jpg" alt="Maintenance Program" class="program-image">
+                    <div class="program-content">
+                        <h2 class="program-title">Maintenance Program</h2>
+                        <p class="program-description">Maintain your ideal weight while enjoying a flexible and sustainable diet.</p>
+                        <div class="program-features">
+                            <div class="feature-item">Balanced nutrition plans</div>
+                            <div class="feature-item">Lifestyle integration</div>
+                            <div class="feature-item">Long-term sustainability</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="meal-planner-section">
+                <h2 class="program-title">Weekly Meal Planner</h2>
+                <p>Plan your meals for the week to stay on track with your diet goals.</p>
+                
+                <div class="meal-planner-container">
+                    <div class="meal-calendar">
+                        <div class="calendar-header">
+                            <button id="prevWeek">&lt;</button>
+                            <h3 id="currentWeek">Week of January 21, 2025</h3>
+                            <button id="nextWeek">&gt;</button>
+                        </div>
+                        
+                        <div class="calendar-grid">
+                            <div class="day-column">
+                                <h4>Monday</h4>
+                                <div class="meal-slot" data-day="monday" data-type="breakfast">
+                                    <h5>Breakfast</h5>
+                                    <div class="meal-content" contenteditable="true" placeholder="Add breakfast"></div>
+                                </div>
+                                <div class="meal-slot" data-day="monday" data-type="lunch">
+                                    <h5>Lunch</h5>
+                                    <div class="meal-content" contenteditable="true" placeholder="Add lunch"></div>
+                                </div>
+                                <div class="meal-slot" data-day="monday" data-type="dinner">
+                                    <h5>Dinner</h5>
+                                    <div class="meal-content" contenteditable="true" placeholder="Add dinner"></div>
+                                </div>
+                                <div class="meal-slot" data-day="monday" data-type="snacks">
+                                    <h5>Snacks</h5>
+                                    <div class="meal-content" contenteditable="true" placeholder="Add snacks"></div>
+                                </div>
+                            </div>
+                            <!-- Repeat for other days -->
+                            <div class="day-column">
+                                <h4>Tuesday</h4>
+                                <!-- Similar meal slots structure -->
+                            </div>
+                            <!-- Add Wednesday to Sunday similarly -->
+                        </div>
+                    </div>
+                    
+                    <div class="meal-suggestions">
+                        <h3>Meal Suggestions</h3>
+                        <div class="suggestion-filters">
+                            <select id="mealTypeFilter">
+                                <option value="all">All Meals</option>
+                                <option value="breakfast">Breakfast</option>
+                                <option value="lunch">Lunch</option>
+                                <option value="dinner">Dinner</option>
+                                <option value="snacks">Snacks</option>
+                            </select>
+                            <select id="dietTypeFilter">
+                                <option value="all">All Diets</option>
+                                <option value="weight-loss">Weight Loss</option>
+                                <option value="muscle-gain">Muscle Gain</option>
+                                <option value="maintenance">Maintenance</option>
+                            </select>
+                        </div>
+                        <div class="suggestion-list">
+                            <!-- Will be populated by JavaScript -->
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="meal-plan-controls">
+                    <button id="savePlan" class="calculate-btn">Save Meal Plan</button>
+                    <button id="sharePlan" class="calculate-btn">Share Plan</button>
+                    <button id="printPlan" class="calculate-btn">Print Plan</button>
+                </div>
+            </div>
+
+            <!-- BMI Calculator Section -->
+            <div class="calculator-section">
+                <h2 class="program-title">BMI Calculator</h2>
+                <p>Calculate your Body Mass Index to determine your healthy weight range.</p>
+                <form class="calculator-form" id="bmiCalculator">
+                    <div class="form-group">
+                        <label for="weight">Weight (kg)</label>
+                        <input type="number" id="weight" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="height">Height (cm)</label>
+                        <input type="number" id="height" required>
+                    </div>
+                    <button type="submit" class="calculate-btn">Calculate BMI</button>
+                    <div class="result-section" id="bmiResult"></div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <footer>
+        <div class="container">
+            <p>&copy; 2025 Be Healthy. All rights reserved.</p>
+        </div>
+    </footer>
+
+    <script>
+        document.getElementById('bmiCalculator').addEventListener('submit', function(e) {
+            e.preventDefault();
+            const weight = parseFloat(document.getElementById('weight').value);
+            const height = parseFloat(document.getElementById('height').value) / 100;
+            const bmi = weight / (height * height);
+            
+            let category;
+            if (bmi < 18.5) category = 'Underweight';
+            else if (bmi < 25) category = 'Normal weight';
+            else if (bmi < 30) category = 'Overweight';
+            else category = 'Obese';
+
+            const resultDiv = document.getElementById('bmiResult');
+            resultDiv.innerHTML = `
+                <h3>Your BMI: ${bmi.toFixed(1)}</h3>
+                <p>Category: ${category}</p>
+                <p>Healthy BMI range: 18.5 - 24.9</p>
+            `;
+            resultDiv.style.display = 'block';
+        });
+    </script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Sample meal suggestions data
+            const mealSuggestions = {
+                breakfast: [
+                    { name: "Oatmeal with Berries", diet: ["weight-loss", "maintenance"] },
+                    { name: "Protein Pancakes", diet: ["muscle-gain"] },
+                    { name: "Greek Yogurt Parfait", diet: ["weight-loss", "maintenance"] }
+                ],
+                lunch: [
+                    { name: "Grilled Chicken Salad", diet: ["weight-loss", "muscle-gain"] },
+                    { name: "Quinoa Buddha Bowl", diet: ["maintenance", "weight-loss"] },
+                    { name: "Tuna Wrap", diet: ["muscle-gain", "maintenance"] }
+                ],
+                dinner: [
+                    { name: "Salmon with Vegetables", diet: ["weight-loss", "muscle-gain"] },
+                    { name: "Turkey Meatballs", diet: ["muscle-gain"] },
+                    { name: "Vegetable Stir-Fry", diet: ["weight-loss", "maintenance"] }
+                ],
+                snacks: [
+                    { name: "Apple with Almond Butter", diet: ["weight-loss", "maintenance"] },
+                    { name: "Protein Shake", diet: ["muscle-gain"] },
+                    { name: "Mixed Nuts", diet: ["maintenance"] }
+                ]
+            };
+        
+            // Update current week display
+            function updateWeekDisplay() {
+                const currentWeek = document.getElementById('currentWeek');
+                // Add logic to update the week display
+            }
+        
+            // Handle meal suggestions filtering
+            function updateMealSuggestions() {
+                const mealType = document.getElementById('mealTypeFilter').value;
+                const dietType = document.getElementById('dietTypeFilter').value;
+                const suggestionList = document.querySelector('.suggestion-list');
+                
+                suggestionList.innerHTML = '';
+                
+                const meals = mealType === 'all' ? 
+                    [...Object.values(mealSuggestions)].flat() :
+                    mealSuggestions[mealType] || [];
+                    
+                const filteredMeals = dietType === 'all' ?
+                    meals :
+                    meals.filter(meal => meal.diet.includes(dietType));
+                    
+                filteredMeals.forEach(meal => {
+                    const div = document.createElement('div');
+                    div.className = 'meal-suggestion';
+                    div.textContent = meal.name;
+                    div.draggable = true;
+                    suggestionList.appendChild(div);
+                });
+            }
+        
+            // Save meal plan
+            document.getElementById('savePlan').addEventListener('click', function() {
+                // Add logic to save the meal plan to localStorage
+                alert('Meal plan saved successfully!');
+            });
+        
+            // Print meal plan
+            document.getElementById('printPlan').addEventListener('click', function() {
+                window.print();
+            });
+        
+            // Share meal plan
+            document.getElementById('sharePlan').addEventListener('click', function() {
+                // Add logic to share the meal plan
+                alert('Share feature coming soon!');
+            });
+        
+            // Initialize
+            updateWeekDisplay();
+            updateMealSuggestions();
+        
+            // Add event listeners for filters
+            document.getElementById('mealTypeFilter').addEventListener('change', updateMealSuggestions);
+            document.getElementById('dietTypeFilter').addEventListener('change', updateMealSuggestions);
+        });
+        </script>
+</body>
+</html>

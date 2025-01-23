@@ -1,0 +1,531 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Healthy Food Catalog</title>
+    <link rel="stylesheet" href="style.css">
+    <style>
+        .food-catalog {
+            padding: 80px 0;
+            background: #f9f9f9;
+        }
+        
+        .food-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 30px;
+            margin-top: 40px;
+        }
+        
+        .food-item {
+            background: #fff;
+            border-radius: 15px;
+            overflow: hidden;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            transition: transform 0.3s;
+        }
+        
+        .food-item:hover {
+            transform: translateY(-5px);
+        }
+        
+        .food-item img {
+            width: 100%;
+            height: 200px;
+            object-fit: cover;
+        }
+        
+        .food-info {
+            padding: 20px;
+        }
+        
+        .food-info h3 {
+            color: #333;
+            margin-bottom: 10px;
+        }
+        
+        .food-info p {
+            color: #666;
+            margin-bottom: 15px;
+        }
+        
+        .nutrition-facts {
+            background: #f0f0f0;
+            padding: 10px;
+            border-radius: 8px;
+            font-size: 14px;
+        }
+        
+        .nutrition-facts h4 {
+            color: #4CAF50;
+            margin-bottom: 8px;
+        }
+        
+        .category-filter {
+            margin-bottom: 30px;
+            text-align: center;
+        }
+        
+        .filter-btn {
+            background: #67ffae;
+            color: #333;
+            border: none;
+            padding: 10px 20px;
+            margin: 0 5px;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background 0.3s;
+        }
+        
+        .filter-btn:hover {
+            background: #1ed48e;
+        }
+
+        .food-category {
+            margin-bottom: 40px;
+        }
+
+        .category-title {
+            color: #333;
+            font-size: 28px;
+            margin: 40px 0 20px;
+            text-align: center;
+            padding-bottom: 10px;
+            border-bottom: 3px solid #67ffae;
+        }
+
+        .nav-toggle {
+            display: none;
+        }
+
+        .nav-toggle-label {
+            display: none;
+        }
+        .search-filter-container {
+            margin: 30px 0;
+            display: flex;
+            flex-wrap: wrap;
+            gap: 20px;
+            justify-content: center;
+        }
+
+        .search-box {
+            flex: 1;
+            min-width: 300px;
+            max-width: 500px;
+        }
+
+        .search-box input {
+            width: 100%;
+            padding: 12px 20px;
+            border: 2px solid #67ffae;
+            border-radius: 25px;
+            font-size: 16px;
+            transition: all 0.3s ease;
+        }
+
+        .search-box input:focus {
+            outline: none;
+            box-shadow: 0 0 5px rgba(103, 255, 174, 0.5);
+        }
+
+        .filter-container {
+            display: flex;
+            gap: 15px;
+            flex-wrap: wrap;
+        }
+
+        .filter-container select {
+            padding: 10px 20px;
+            border: 2px solid #67ffae;
+            border-radius: 20px;
+            font-size: 16px;
+            background: white;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .filter-container select:hover {
+            background: #f0f0f0;
+        }
+
+        .food-item {
+            transition: all 0.3s ease;
+        }
+
+        .food-item.hidden {
+            display: none;
+        }
+
+        @media screen and (max-width: 768px) {
+            .search-filter-container {
+                flex-direction: column;
+                align-items: center;
+            }
+            
+            .search-box {
+                width: 100%;
+            }
+            
+            .filter-container {
+                width: 100%;
+                justify-content: center;
+            }
+        }
+
+        /* Mobile styles */
+        @media screen and (max-width: 768px) {
+            nav {
+                width: 100%;
+                position: fixed;
+                top: 0;
+                padding: 10px 5%;
+                display: flex;
+                align-items: center;
+                justify-content: space-between;
+                background: rgba(0, 0, 0, 0.9);
+                z-index: 1000;
+            }
+
+            .nav-toggle-label {
+                display: block;
+                cursor: pointer;
+                position: relative;
+                z-index: 1000;
+                padding: 1rem;
+            }
+
+            .nav-toggle-label span {
+                display: block;
+                width: 25px;
+                height: 3px;
+                background-color: white;
+                margin-bottom: 5px;
+                transition: transform 0.3s ease-in-out;
+            }
+
+            nav ul {
+                position: fixed;
+                top: 0;
+                right: -200px;
+                width: 200px;
+                height: 100vh;
+                background: rgba(0, 0, 0, 0.9);
+                padding-top: 60px;
+                transition: right 0.3s ease-in-out;
+            }
+
+            nav ul li {
+                display: block;
+                margin: 20px;
+            }
+
+            .nav-toggle:checked ~ ul {
+                right: 0;
+            }
+
+            body {
+                padding-top: 60px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <nav>
+        <img src="image/logo.png" class="logo" alt="Healthy Food Logo">
+        <input type="checkbox" id="nav-toggle" class="nav-toggle">
+        <label for="nav-toggle" class="nav-toggle-label">
+            <span></span>
+            <span></span>
+            <span></span>
+        </label>
+        <ul>
+            <li><a href="index.html">Home</a></li>
+            <li><a href="index.html#about">About</a></li>
+            <li><a href="index.html#recipes">Recipes</a></li>
+            <li><a href="index.html#tips">Tips</a></li>
+            <li><a href="index.html#contact">Contact</a></li>
+            <li><a href="healthyfoods.html">Healthy Foods</a></li>
+            <li><a href="dietprogram.html">Diet Program</a></li>
+        </ul>
+    </nav>
+
+    <div class="food-catalog">
+        <div class="container">
+            <h1 class="sub-title">Healthy Food Catalog</h1>
+            <!-- Tambahkan setelah paragraf di bawah h1 class="sub-title" -->
+            <div class="search-filter-container">
+                <div class="search-box">
+                    <input type="text" id="searchFood" placeholder="Search for healthy foods...">
+                </div>
+                
+                <div class="filter-container">
+                    <select id="categoryFilter">
+                        <option value="all">All Categories</option>
+                        <option value="fruits">Fruits</option>
+                        <option value="vegetables">Vegetables</option>
+                        <option value="grains">Grains</option>
+                        <option value="proteins">Proteins</option>
+                    </select>
+                    
+                    <select id="nutritionFilter">
+                        <option value="all">All Nutrition Types</option>
+                        <option value="high-protein">High Protein</option>
+                        <option value="low-calorie">Low Calorie</option>
+                        <option value="high-fiber">High Fiber</option>
+                        <option value="vitamin-rich">Vitamin Rich</option>
+                    </select>
+                </div>
+            </div>
+            <p>Discover nutritious and delicious foods that will boost your health and energy.</p>
+
+            <!-- Fruits Category -->
+            <div class="food-category">
+                <h2 class="category-title">Fruits</h2>
+                <div class="food-grid">
+                    <div class="food-item">
+                        <img src="image/avocado.jpg" alt="Avocado">
+                        <div class="food-info">
+                            <h3>Avocado</h3>
+                            <p>Rich in healthy fats and fiber, avocados support heart health and provide essential nutrients.</p>
+                            <div class="nutrition-facts">
+                                <h4>Nutrition Facts (per 100g)</h4>
+                                <p>Calories: 160<br>
+                                   Fat: 15g<br>
+                                   Protein: 2g<br>
+                                   Fiber: 7g</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="food-item">
+                        <img src="image/blueberries.jpg" alt="Blueberries">
+                        <div class="food-info">
+                            <h3>Blueberries</h3>
+                            <p>Packed with antioxidants, these berries improve brain function and reduce disease risk.</p>
+                            <div class="nutrition-facts">
+                                <h4>Nutrition Facts (per 100g)</h4>
+                                <p>Calories: 57<br>
+                                   Sugar: 10g<br>
+                                   Fiber: 2.4g<br>
+                                   Vitamin C: 14% DV</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="food-item">
+                        <img src="image/pomegranate.jpg" alt="Pomegranate">
+                        <div class="food-info">
+                            <h3>Pomegranate</h3>
+                            <p>High in antioxidants and anti-inflammatory compounds, great for heart health.</p>
+                            <div class="nutrition-facts">
+                                <h4>Nutrition Facts (per 100g)</h4>
+                                <p>Calories: 83<br>
+                                   Fiber: 4g<br>
+                                   Vitamin C: 17% DV<br>
+                                   Potassium: 236mg</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Vegetables Category -->
+            <div class="food-category">
+                <h2 class="category-title">Vegetables</h2>
+                <div class="food-grid">
+                    <div class="food-item">
+                        <img src="image/kale.jpg" alt="Kale">
+                        <div class="food-info">
+                            <h3>Kale</h3>
+                            <p>A nutrient-dense leafy green packed with vitamins, minerals, and antioxidants.</p>
+                            <div class="nutrition-facts">
+                                <h4>Nutrition Facts (per 100g)</h4>
+                                <p>Calories: 49<br>
+                                   Protein: 4.3g<br>
+                                   Vitamin C: 200% DV<br>
+                                   Vitamin K: 659% DV</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="food-item">
+                        <img src="image/sweetpotato.jpg" alt="Sweet Potato">
+                        <div class="food-info">
+                            <h3>Sweet Potato</h3>
+                            <p>Rich in beta-carotene and fiber, excellent for eye health and digestion.</p>
+                            <div class="nutrition-facts">
+                                <h4>Nutrition Facts (per 100g)</h4>
+                                <p>Calories: 86<br>
+                                   Fiber: 3g<br>
+                                   Vitamin A: 438% DV<br>
+                                   Potassium: 337mg</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="food-item">
+                        <img src="image/broccoli.jpg" alt="Broccoli">
+                        <div class="food-info">
+                            <h3>Broccoli</h3>
+                            <p>A cruciferous vegetable high in fiber and cancer-fighting compounds.</p>
+                            <div class="nutrition-facts">
+                                <h4>Nutrition Facts (per 100g)</h4>
+                                <p>Calories: 55<br>
+                                   Protein: 3.7g<br>
+                                   Fiber: 2.6g<br>
+                                   Vitamin C: 135% DV</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Grains Category -->
+            <div class="food-category">
+                <h2 class="category-title">Grains</h2>
+                <div class="food-grid">
+                    <div class="food-item">
+                        <img src="image/quinoa.jpg" alt="Quinoa">
+                        <div class="food-info">
+                            <h3>Quinoa</h3>
+                            <p>A complete protein source rich in fiber and various minerals.</p>
+                            <div class="nutrition-facts">
+                                <h4>Nutrition Facts (per 100g)</h4>
+                                <p>Calories: 120<br>
+                                   Protein: 4.4g<br>
+                                   Fiber: 2.8g<br>
+                                   Iron: 15% DV</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="food-item">
+                        <img src="image/oats.jpg" alt="Oats">
+                        <div class="food-info">
+                            <h3>Oats</h3>
+                            <p>High in fiber and beta-glucans, excellent for heart health and stable energy.</p>
+                            <div class="nutrition-facts">
+                                <h4>Nutrition Facts (per 100g)</h4>
+                                <p>Calories: 389<br>
+                                   Protein: 16.9g<br>
+                                   Fiber: 10.6g<br>
+                                   Iron: 4.72mg</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="food-item">
+                        <img src="image/brownrice.jpg" alt="Brown Rice">
+                        <div class="food-info">
+                            <h3>Brown Rice</h3>
+                            <p>Whole grain rich in fiber and minerals, better alternative to white rice.</p>
+                            <div class="nutrition-facts">
+                                <h4>Nutrition Facts (per 100g)</h4>
+                                <p>Calories: 111<br>
+                                   Protein: 2.6g<br>
+                                   Fiber: 1.8g<br>
+                                   Magnesium: 39mg</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Proteins Category -->
+            <div class="food-category">
+                <h2 class="category-title">Proteins</h2>
+                <div class="food-grid">
+                    <div class="food-item">
+                        <img src="image/salmon.jpg" alt="Salmon">
+                        <div class="food-info">
+                            <h3>Salmon</h3>
+                            <p>Rich in omega-3 fatty acids and high-quality protein, excellent for brain health.</p>
+                            <div class="nutrition-facts">
+                                <h4>Nutrition Facts (per 100g)</h4>
+                                <p>Calories: 208<br>
+                                   Protein: 22g<br>
+                                   Omega-3: 2.3g<br>
+                                   Vitamin D: 66% DV</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="food-item">
+                        <img src="image/lentils.jpg" alt="Lentils">
+                        <div class="food-info">
+                            <h3>Lentils</h3>
+                            <p>Plant-based protein source high in fiber and iron, perfect for vegetarians.</p>
+                            <div class="nutrition-facts">
+                                <h4>Nutrition Facts (per 100g)</h4>
+                                <p>Calories: 116<br>
+                                   Protein: 9g<br>
+                                   Fiber: 7.9g<br>
+                                   Iron: 3.3mg</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="food-item">
+                        <img src="image/chickenbreast.jpg" alt="Chicken Breast">
+                        <div class="food-info">
+                            <h3>Chicken Breast</h3>
+                            <p>Lean protein source, low in fat and versatile for healthy meal preparation.</p>
+                            <div class="nutrition-facts">
+                                <h4>Nutrition Facts (per 100g)</h4>
+                                <p>Calories: 165<br>
+                                   Protein: 31g<br>
+                                   Fat: 3.6g<br>
+                                   Vitamin B6: 15% DV</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <footer>
+        <div class="container">
+            <p>&copy; 2025 Be Healthy. All rights reserved.</p>
+        </div>
+    </footer>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const searchInput = document.getElementById('searchFood');
+            const categoryFilter = document.getElementById('categoryFilter');
+            const nutritionFilter = document.getElementById('nutritionFilter');
+            const foodItems = document.querySelectorAll('.food-item');
+        
+            function filterFoods() {
+                const searchTerm = searchInput.value.toLowerCase();
+                const selectedCategory = categoryFilter.value;
+                const selectedNutrition = nutritionFilter.value;
+        
+                foodItems.forEach(item => {
+                    const title = item.querySelector('h3').textContent.toLowerCase();
+                    const description = item.querySelector('p').textContent.toLowerCase();
+                    const category = item.closest('.food-category').querySelector('.category-title').textContent.toLowerCase();
+                    const nutritionText = item.querySelector('.nutrition-facts').textContent.toLowerCase();
+        
+                    const matchesSearch = title.includes(searchTerm) || description.includes(searchTerm);
+                    const matchesCategory = selectedCategory === 'all' || category.includes(selectedCategory);
+                    const matchesNutrition = selectedNutrition === 'all' || nutritionText.includes(selectedNutrition.replace('-', ' '));
+        
+                    if (matchesSearch && matchesCategory && matchesNutrition) {
+                        item.classList.remove('hidden');
+                    } else {
+                        item.classList.add('hidden');
+                    }
+                });
+            }
+        
+            searchInput.addEventListener('input', filterFoods);
+            categoryFilter.addEventListener('change', filterFoods);
+            nutritionFilter.addEventListener('change', filterFoods);
+        });
+        </script>
+</body>
+</html>
